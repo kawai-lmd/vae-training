@@ -55,7 +55,10 @@ for i in range(0,2):
         axs[i,j].matshow(X_train[n])
         axs[i,j].set(title=y_train[n])
         n=n+1
+plt.savefig('png/data.png')
 plt.show()
+
+
 
 # Reshape input data
 X_train = X_train.reshape(60000, 784)
@@ -145,6 +148,10 @@ vae.compile(optimizer='adam')
 
 # Train VAE model
 history = vae.fit(X_train, X_train, epochs=25, batch_size=16, validation_data=(X_test, X_test))
+# Save VAE model
+vae.save('models/vae_model.h5')
+encoder.save('models/encoder_model.h5')
+decoder.save('models/decoder_model.h5')
 
 # Plot a loss chart
 fig, ax = plt.subplots(figsize=(16,9), dpi=300)
@@ -155,7 +162,9 @@ ax.plot(history.history['val_loss'], label='Test Data', color='red')
 ax.set(xlabel='Epoch', ylabel='Loss')
 plt.xticks(ticks=np.arange(len(history.history['loss']), step=1), labels=np.arange(1, len(history.history['loss'])+1, step=1))
 plt.legend()
+plt.savefig('png/vae_loss_time.png')
 plt.show()
+
 
 
 # Use encoder model to encode inputs into a latent space
@@ -196,7 +205,9 @@ digit_decoded = decoder.predict(z_sample_digit)
 
 # Reshape and display the image
 plt.matshow(digit_decoded.reshape(28,28))
+plt.savefig('png/vae_digit.png')
 plt.show()
+
 
 # Display a 2D manifold of the digits
 n = 30  # figure with 30x30 digits
@@ -222,4 +233,5 @@ for i, yi in enumerate(grid_x):
 # Plot figure
 plt.figure(figsize=(18, 16))
 plt.imshow(figure)
+plt.savefig('png/vae_2d_digit.png')
 plt.show()
